@@ -1,0 +1,27 @@
+<Project>
+    <Import Project="../secyud.props"/>
+
+    <PropertyGroup>
+        <RootNamespace>Secyud</RootNamespace>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Version>1.0.0-alpha.0</Version>
+        <Description>
+            utils
+        </Description>
+        <PackageProjectUrl>https://github.com/Secyud/Utils</PackageProjectUrl>
+        <PackageTags>Utils</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
+        <DotnetVersion>8.*</DotnetVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0'">
+        <DotnetVersion>9.*</DotnetVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../../README.md"
+              Pack="true" PackagePath="/"/>
+    </ItemGroup>
+</Project>

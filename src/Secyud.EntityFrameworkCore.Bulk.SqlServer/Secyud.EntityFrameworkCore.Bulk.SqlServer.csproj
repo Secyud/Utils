@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../../common.props"/>
+
+    <PropertyGroup>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <RootNamespace>Secyud.Utils.EntityFrameworkCore</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Secyud.EntityFrameworkCore.Bulk\Secyud.EntityFrameworkCore.Bulk.csproj" />
+        
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(DotnetVersion)"/>
+    </ItemGroup>
+</Project>
