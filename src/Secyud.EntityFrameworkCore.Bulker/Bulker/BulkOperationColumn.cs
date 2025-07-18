@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Secyud.EntityFrameworkCore.Models;
+namespace Secyud.EntityFrameworkCore.Bulker;
 
-public class BulkOperationColumn(IProperty property, string columnName)
+public class BulkOperationColumn(IProperty property, string columnName) : IColumnInfo
 {
     public IProperty Property { get; set; } = property;
 

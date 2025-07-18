@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Secyud.EntityFrameworkCore.Models;
+namespace Secyud.EntityFrameworkCore.Bulker;
 
 public class BulkOperationNavigation(INavigation navigation)
 {

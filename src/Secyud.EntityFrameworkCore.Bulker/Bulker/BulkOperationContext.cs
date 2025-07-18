@@ -2,7 +2,6 @@
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Secyud.EntityFrameworkCore.Models;
 using Secyud.EntityFrameworkCore.Options;
 
 namespace Secyud.EntityFrameworkCore.Bulker;

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Secyud.EntityFrameworkCore.Models;
 using Secyud.EntityFrameworkCore.Options;
 
 namespace Secyud.EntityFrameworkCore.Bulker;
@@ -46,13 +46,13 @@ public abstract class BulkOperationAdapterBase : IBulkOperationAdapter
     }
 
     protected virtual async Task InsertManyAsync<TEntity>(BulkOperationContext context, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         await Task.CompletedTask;
     }
 
     public virtual async Task InsertManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         await dbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -72,15 +72,14 @@ public abstract class BulkOperationAdapterBase : IBulkOperationAdapter
         }
     }
 
-
     protected virtual async Task UpdateManyAsync<TEntity>(BulkOperationContext context, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         await Task.CompletedTask;
     }
 
     public virtual async Task UpdateManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         await dbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -101,13 +100,13 @@ public abstract class BulkOperationAdapterBase : IBulkOperationAdapter
     }
 
     protected virtual async Task DeleteManyAsync<TEntity>(BulkOperationContext context, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         await Task.CompletedTask;
     }
 
     public virtual async Task DeleteManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         await dbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -126,6 +125,19 @@ public abstract class BulkOperationAdapterBase : IBulkOperationAdapter
             await dbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
         }
     }
+
+
+    protected virtual async Task MergeTableAsync(BulkOperationContext context, BulkOperationTableInfo source,
+        CancellationToken cancellationToken)
+    {
+        var (sql, parameters) = SqlMergeTable(context, source);
+        await context.DbContext.Database.ExecuteSqlRawAsync(sql, parameters, cancellationToken);
+    }
+
+
+    protected abstract (string sql, IEnumerable<object> parameters) SqlMergeTable(
+        BulkOperationContext context, BulkOperationTableInfo source);
+
 
 
     public abstract bool IsThisAdapter(DbContext dbContext);

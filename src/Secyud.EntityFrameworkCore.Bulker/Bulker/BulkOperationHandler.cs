@@ -21,19 +21,19 @@ public class BulkOperationHandler(IOptions<BulkOptions> options, IServiceProvide
     }
 
     public Task InsertManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         return GetAdapter(dbContext).InsertManyAsync(dbContext, entities, cancellationToken);
     }
 
     public Task UpdateManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         return GetAdapter(dbContext).UpdateManyAsync(dbContext, entities, cancellationToken);
     }
 
     public Task DeleteManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken) where TEntity : class
     {
         return GetAdapter(dbContext).DeleteManyAsync(dbContext, entities, cancellationToken);
     }

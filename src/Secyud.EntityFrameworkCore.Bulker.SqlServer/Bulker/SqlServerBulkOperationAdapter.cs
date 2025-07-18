@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -35,14 +36,75 @@ public class SqlServerBulkOperationAdapter(
 
         var dataTable = new DataTable();
 
-        dataTable.Columns.AddRange(context.Table.Columns
+        var columns = context.Table.Columns;
+
+        dataTable.Columns.AddRange(columns
             .Select(u => new DataColumn(u.PropertyName, u.Property.ClrType))
             .ToArray());
 
         foreach (var entity in entities)
         {
-            dataTable.Rows.Add();
-
+            dataTable.Rows.Add(columns.Select(u => u.Get(entity)).ToArray());
         }
+
+        await sqlBulkCopy.WriteToServerAsync(dataTable, cancellationToken);
+    }
+
+    protected override async Task MergeTableAsync(BulkOperationContext context, BulkOperationTableInfo source,
+        CancellationToken cancellationToken)
+    {
+        await context.DbContext.Database.ExecuteSqlRawAsync(
+            SqlSetIdentityInsert(context, true), cancellationToken);
+
+        await base.MergeTableAsync(context, source, cancellationToken);
+
+
+        await context.DbContext.Database.ExecuteSqlRawAsync(
+            SqlSetIdentityInsert(context, false), cancellationToken);
+    }
+
+    protected static string SqlSetIdentityInsert(BulkOperationContext context, bool insert)
+    {
+        return $"SET IDENTITY_INSERT [{context.Table.TableName}] {(insert ? "ON" : "OFF")};";
+    }
+
+    protected override (string sql, IEnumerable<object> parameters) SqlMergeTable(
+        BulkOperationContext context, BulkOperationTableInfo source)
+    {
+        var sb = new SqlServerBulkSqlBuilder();
+        List<object> parameters = [];
+
+        var targetTable = sb.GetTableName(context.Table);
+        var sourceTable = sb.GetTableName(source);
+
+        sb.Builder.Append(
+            $"""
+             MERGE {targetTable} WITH (HOLDLOCK) AS T
+             USING {sourceTable} AS S 
+             """);
+
+        if (context.Table.PrimaryKeys.Count != 0)
+        {
+            sb.Builder.Append("ON ");
+            sb.AppendColumnsSeparatedWithAnd(
+                context.Table.PrimaryKeys, "T", "S");
+        }
+
+        sb.Builder.Append(" WHEN NOT MATCHED BY TARGET THEN INSERT ");
+        if (context.Table.Columns.Count != 0)
+        {
+            sb.Builder.Append('(');
+            sb.AppendColumns(context.Table.Columns);
+            sb.Builder.Append(") VALUES (");
+            sb.AppendColumns(context.Table.Columns, "S");
+            sb.Builder.Append(')');
+        }
+        else
+        {
+            sb.Builder.Append("DEFAULT VALUES");
+        }
+
+
+        return (sb.ToString(), parameters);
     }
 }
