@@ -9,6 +9,7 @@
     
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(DotnetVersion)"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="$(DotnetVersion)"/>
     </ItemGroup>
 
 </Project>

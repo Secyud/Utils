@@ -1,4 +1,4 @@
-﻿namespace Secyud.Utils.EntityFrameworkCore.Options;
+﻿namespace Secyud.EntityFrameworkCore.Options;
 
 public class BulkEntityOptionsBuilder
 {
@@ -34,7 +34,7 @@ public class BulkEntityOptionsBuilder
 
     public BulkEntityOptions BuildOptions(Type type)
     {
-        BulkEntityOptions options = new(type);
+        BulkEntityOptions options = new();
         foreach (var action in _globalOptions)
         {
             action(options);

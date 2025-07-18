@@ -1,7 +1,5 @@
-﻿namespace Secyud.Utils.EntityFrameworkCore.Options;
+﻿namespace Secyud.EntityFrameworkCore.Options;
 
-public class BulkEntityOptions(Type type)
+public class BulkEntityOptions
 {
-    public Type Type { get; } = type;
-    public List<Func<object, IEnumerable<object>>> Navigation { get; } = [];
 }

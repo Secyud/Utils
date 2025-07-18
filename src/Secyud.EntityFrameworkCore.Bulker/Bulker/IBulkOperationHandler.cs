@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Secyud.Utils.EntityFrameworkCore.Bulks;
+namespace Secyud.EntityFrameworkCore.Bulker;
 
 public interface IBulkOperationHandler
 {
-    Task InsertManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    Task InsertManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken = default);
 
-    Task UpdateManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    Task UpdateManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken = default);
 
-    Task DeleteManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    Task DeleteManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken = default);
 }

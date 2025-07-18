@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Secyud.Utils.EntityFrameworkCore.Bulks;
+namespace Secyud.EntityFrameworkCore.Bulker;
 
 public interface IBulkOperationAdapter : IBulkOperationHandler
 {
-    bool IsThisAdapter(DbContext context);
+    bool IsThisAdapter(DbContext dbContext);
 }

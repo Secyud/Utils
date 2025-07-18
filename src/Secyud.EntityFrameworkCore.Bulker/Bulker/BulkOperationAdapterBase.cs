@@ -1,34 +1,132 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Secyud.Utils.EntityFrameworkCore.Exceptions;
-using Secyud.Utils.EntityFrameworkCore.Options;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Secyud.EntityFrameworkCore.Models;
+using Secyud.EntityFrameworkCore.Options;
 
-namespace Secyud.Utils.EntityFrameworkCore.Bulks;
+namespace Secyud.EntityFrameworkCore.Bulker;
 
 public abstract class BulkOperationAdapterBase : IBulkOperationAdapter
 {
-    protected virtual Task SaveChangesAsync(DbContext context, CancellationToken cancellationToken)
+    private readonly Lazy<ILogger> _logger;
+    protected IOptions<BulkOptions> Options { get; }
+
+    protected BulkOperationAdapterBase(IOptions<BulkOptions> options, ILoggerFactory loggerFactory)
     {
-        return context.SaveChangesAsync(cancellationToken);
+        Options = options;
+        _logger = new Lazy<ILogger>(() => loggerFactory.CreateLogger(GetType()));
     }
 
-    public virtual Task InsertManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    protected ILogger Logger => _logger.Value;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dbContext"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    protected BulkOperationContext CreateBulkContext<TEntity>(DbContext dbContext)
+    {
+        var type = typeof(TEntity);
+
+        var entityType = dbContext.Model.FindEntityType(type);
+
+        if (entityType is null)
+        {
+            throw new InvalidOperationException(
+                $"DbContext does not contain EntitySet for Type: {type.Name}");
+        }
+
+        var table = new BulkOperationTable(type, entityType);
+        var entityOptions = Options.Value.EntityOptionsBuilder.BuildOptions<TEntity>();
+        var context = new BulkOperationContext(dbContext, table, entityOptions);
+
+        return context;
+    }
+
+    protected virtual async Task InsertManyAsync<TEntity>(BulkOperationContext context, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken)
     {
-        return SaveChangesAsync(context, cancellationToken);
+        await Task.CompletedTask;
     }
 
-    public virtual Task UpdateManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    public virtual async Task InsertManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken)
     {
-        return SaveChangesAsync(context, cancellationToken);
+        await dbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            var context = CreateBulkContext<TEntity>(dbContext);
+
+            await InsertManyAsync(context, entities, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Bulk insert failed!");
+        }
+        finally
+        {
+            await dbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+        }
     }
 
-    public virtual Task DeleteManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+
+    protected virtual async Task UpdateManyAsync<TEntity>(BulkOperationContext context, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken)
     {
-        return SaveChangesAsync(context, cancellationToken);
+        await Task.CompletedTask;
+    }
+
+    public virtual async Task UpdateManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
+        CancellationToken cancellationToken)
+    {
+        await dbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            var context = CreateBulkContext<TEntity>(dbContext);
+
+            await UpdateManyAsync(context, entities, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Bulk insert failed!");
+        }
+        finally
+        {
+            await dbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+        }
+    }
+
+    protected virtual async Task DeleteManyAsync<TEntity>(BulkOperationContext context, IEnumerable<TEntity> entities,
+        CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+    }
+
+    public virtual async Task DeleteManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
+        CancellationToken cancellationToken)
+    {
+        await dbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            var context = CreateBulkContext<TEntity>(dbContext);
+
+            await DeleteManyAsync(context, entities, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Bulk insert failed!");
+        }
+        finally
+        {
+            await dbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+        }
     }
 
 
-    public abstract bool IsThisAdapter(DbContext context);
+    public abstract bool IsThisAdapter(DbContext dbContext);
 }

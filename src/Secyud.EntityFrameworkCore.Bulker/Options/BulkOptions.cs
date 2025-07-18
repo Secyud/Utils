@@ -1,10 +1,10 @@
-﻿using Secyud.Utils.EntityFrameworkCore.Bulks;
+﻿using Secyud.EntityFrameworkCore.Bulker;
 
-namespace Secyud.Utils.EntityFrameworkCore.Options;
+namespace Secyud.EntityFrameworkCore.Options;
 
 public class BulkOptions
 {
-    public List<IBulkOperationAdapter> Handlers { get; } = [];
+    public List<Type> Adapters { get; } = [];
 
     public BulkEntityOptionsBuilder EntityOptionsBuilder { get; } = new();
 }

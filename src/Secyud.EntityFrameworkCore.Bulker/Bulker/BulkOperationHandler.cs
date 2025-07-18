@@ -1,36 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Secyud.Utils.EntityFrameworkCore.Exceptions;
-using Secyud.Utils.EntityFrameworkCore.Options;
+using Secyud.EntityFrameworkCore.Options;
 
-namespace Secyud.Utils.EntityFrameworkCore.Bulks;
+namespace Secyud.EntityFrameworkCore.Bulker;
 
-public class BulkOperationHandler(IOptions<BulkOptions> options) : IBulkOperationHandler
+public class BulkOperationHandler(IOptions<BulkOptions> options, IServiceProvider provider) : IBulkOperationHandler
 {
     protected virtual IBulkOperationAdapter GetAdapter(DbContext context)
     {
-        var adapter = options.Value.Handlers.FirstOrDefault(u => u.IsThisAdapter(context));
-        if (adapter is null)
-            throw new BulkOperationAdapterNotRegisteredException(context);
+        var services = options.Value.Adapters.Select(provider.GetRequiredService);
+        foreach (var service in services)
+        {
+            if (service is IBulkOperationAdapter adapter &&
+                adapter.IsThisAdapter(context))
+                return adapter;
+        }
 
-        return adapter;
+        throw new InvalidOperationException($"no adaptor is fit for context {context.Database.ProviderName}.");
     }
 
-    public Task InsertManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    public Task InsertManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken)
     {
-        return GetAdapter(context).InsertManyAsync(context, entities, cancellationToken);
+        return GetAdapter(dbContext).InsertManyAsync(dbContext, entities, cancellationToken);
     }
 
-    public Task UpdateManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    public Task UpdateManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken)
     {
-        return GetAdapter(context).UpdateManyAsync(context, entities, cancellationToken);
+        return GetAdapter(dbContext).UpdateManyAsync(dbContext, entities, cancellationToken);
     }
 
-    public Task DeleteManyAsync<TEntity>(DbContext context, IEnumerable<TEntity> entities,
+    public Task DeleteManyAsync<TEntity>(DbContext dbContext, IEnumerable<TEntity> entities,
         CancellationToken cancellationToken)
     {
-        return GetAdapter(context).DeleteManyAsync(context, entities, cancellationToken);
+        return GetAdapter(dbContext).DeleteManyAsync(dbContext, entities, cancellationToken);
     }
 }

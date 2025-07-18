@@ -6,4 +6,7 @@
     <Project Path="src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj" Type="Classic C#" />
     <Project Path="src\Secyud.EntityFrameworkCore.Bulker\Secyud.EntityFrameworkCore.Bulker.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test\Secyud.EntityFrameworkCore.Bulker.Tests\Secyud.EntityFrameworkCore.Bulker.Tests.csproj" Type="Classic C#" />
+  </Folder>
 </Solution>
