@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/files/">
     <File Path="common.props" />
+    <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj" Type="Classic C#" />
