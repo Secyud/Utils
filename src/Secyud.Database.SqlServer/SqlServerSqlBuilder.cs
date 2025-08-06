@@ -1,6 +1,6 @@
-﻿namespace Secyud.EntityFrameworkCore.Bulker;
+﻿namespace Secyud.Database;
 
-public class SqlServerBulkSqlBuilder : BulkSqlBuilderBase
+public class SqlServerSqlBuilder : SqlBuilderBase
 {
     public override string GetTableName(ITableInfo table)
     {

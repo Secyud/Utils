@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace Secyud.EntityFrameworkCore.Bulker;
+namespace Secyud.Database;
 
-public abstract class BulkSqlBuilderBase
+public abstract class SqlBuilderBase
 {
     public StringBuilder Builder { get; } = new();
 
@@ -54,8 +54,15 @@ public abstract class BulkSqlBuilderBase
         AppendColumns(columns, prefixTable, equalsTable, " AND ");
     }
 
-    public abstract string GetTableName(ITableInfo table);
-    public abstract string GetColumnName(IColumnInfo column);
+    public virtual string GetTableName(ITableInfo table)
+    {
+        return $"{table.Schema}{(table.Schema is null ? "" : ".")}[{table.TableName}]";
+    }
+
+    public virtual string GetColumnName(IColumnInfo column)
+    {
+        return $"\"{column.ColumnName}\"";
+    }
 
     public override string ToString()
     {

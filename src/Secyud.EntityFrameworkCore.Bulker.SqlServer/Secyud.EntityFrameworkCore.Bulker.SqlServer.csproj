@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Secyud.Database.SqlServer\Secyud.Database.SqlServer.csproj" />
         <ProjectReference Include="..\Secyud.EntityFrameworkCore.Bulker\Secyud.EntityFrameworkCore.Bulker.csproj" />
         
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(DotnetVersion)"/>

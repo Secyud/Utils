@@ -4,10 +4,12 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj" Type="Classic C#" />
+    <Project Path="src\Secyud.Database.SqlServer\Secyud.Database.SqlServer.csproj"  />
+    <Project Path="src\Secyud.Database\Secyud.Database.csproj"  />
+    <Project Path="src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj"  />
     <Project Path="src\Secyud.EntityFrameworkCore.Bulker\Secyud.EntityFrameworkCore.Bulker.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test\Secyud.EntityFrameworkCore.Bulker.Tests\Secyud.EntityFrameworkCore.Bulker.Tests.csproj" Type="Classic C#" />
+    <Project Path="test\Secyud.EntityFrameworkCore.Bulker.Tests\Secyud.EntityFrameworkCore.Bulker.Tests.csproj"  />
   </Folder>
 </Solution>

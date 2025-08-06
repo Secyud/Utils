@@ -1,4 +1,6 @@
-﻿namespace Secyud.EntityFrameworkCore.Bulker;
+﻿using Secyud.Database;
+
+namespace Secyud.EntityFrameworkCore.Bulker;
 
 public class BulkOperationTableInfo : ITableInfo
 {

@@ -11,5 +11,10 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(DotnetVersion)"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="$(DotnetVersion)"/>
     </ItemGroup>
+    
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Secyud.Database\Secyud.Database.csproj" />
+    </ItemGroup>
 
 </Project>

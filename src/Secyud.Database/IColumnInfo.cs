@@ -1,4 +1,4 @@
-﻿namespace Secyud.EntityFrameworkCore.Bulker;
+﻿namespace Secyud.Database;
 
 public interface IColumnInfo
 {

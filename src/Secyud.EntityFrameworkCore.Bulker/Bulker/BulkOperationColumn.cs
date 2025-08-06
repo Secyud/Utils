@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Secyud.Database;
 
 namespace Secyud.EntityFrameworkCore.Bulker;
 

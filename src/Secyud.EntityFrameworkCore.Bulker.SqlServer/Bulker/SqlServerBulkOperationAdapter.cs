@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Secyud.Database;
 using Secyud.EntityFrameworkCore.Options;
 
 namespace Secyud.EntityFrameworkCore.Bulker;
@@ -71,7 +72,7 @@ public class SqlServerBulkOperationAdapter(
     protected override (string sql, IEnumerable<object> parameters) SqlMergeTable(
         BulkOperationContext context, BulkOperationTableInfo source)
     {
-        var sb = new SqlServerBulkSqlBuilder();
+        var sb = new SqlServerSqlBuilder();
         List<object> parameters = [];
 
         var targetTable = sb.GetTableName(context.Table);
