@@ -2,11 +2,9 @@
     <Import Project="../../common.props"/>
     
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <RootNamespace>Secyud.EntityFrameworkCore</RootNamespace>
     </PropertyGroup>
-    
-    
+        
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(DotnetVersion)"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="$(DotnetVersion)"/>

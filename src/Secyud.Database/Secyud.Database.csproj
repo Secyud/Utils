@@ -2,9 +2,7 @@
     <Import Project="../../common.props"/>
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <RootNamespace>Secyud.Database</RootNamespace>
-        <Version>1.0.0-alpha.0</Version>
     </PropertyGroup>
 
 </Project>
