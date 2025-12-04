@@ -2,10 +2,8 @@
     <Import Project="../../common.props"/>
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <RootNamespace>Secyud</RootNamespace>
     </PropertyGroup>
-    
-    
+
 
 </Project>
