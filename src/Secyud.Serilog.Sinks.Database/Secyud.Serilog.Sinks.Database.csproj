@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="../../common.props"/>
+
+    <PropertyGroup>
+        <RootNamespace>Secyud.Serilog.Sinks</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Serilog"/>
+        
+        <ProjectReference Include="..\Secyud.Database\Secyud.Database.csproj"/>
+    </ItemGroup>
+
+</Project>

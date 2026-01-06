@@ -1,0 +1,1 @@
+# Serilog Database Sink

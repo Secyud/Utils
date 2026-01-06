@@ -16,6 +16,8 @@ public class SqlServerBulkOperationAdapter(
     IOptions<SqlServerBulkOptions> sqlOptions)
     : BulkOperationAdapterBase(options, loggerFactory), ISqlServerBulkOperationAdapter
 {
+    protected SqlServerSqlBuildHelper BuildHelper { get; } = new();
+
     public override bool IsThisAdapter(DbContext dbContext)
     {
         return dbContext.Database.IsSqlServer();
@@ -72,13 +74,13 @@ public class SqlServerBulkOperationAdapter(
     protected override (string sql, IEnumerable<object> parameters) SqlMergeTable(
         BulkOperationContext context, BulkOperationTableInfo source)
     {
-        var sb = new SqlServerSqlBuilder();
+        var sb = new StringBuilder();
         List<object> parameters = [];
 
-        var targetTable = sb.GetTableName(context.Table);
-        var sourceTable = sb.GetTableName(source);
+        var targetTable = BuildHelper.GetTableIdentifier(context.Table);
+        var sourceTable = BuildHelper.GetTableIdentifier(source);
 
-        sb.Builder.Append(
+        sb.Append(
             $"""
              MERGE {targetTable} WITH (HOLDLOCK) AS T
              USING {sourceTable} AS S 
@@ -86,25 +88,23 @@ public class SqlServerBulkOperationAdapter(
 
         if (context.Table.PrimaryKeys.Count != 0)
         {
-            sb.Builder.Append("ON ");
-            sb.AppendColumnsSeparatedWithAnd(
-                context.Table.PrimaryKeys, "T", "S");
+            sb.Append("ON ");
+            BuildHelper.AppendColumnsSeparatedWithAnd(sb, context.Table.PrimaryKeys, "T", "S");
         }
 
-        sb.Builder.Append(" WHEN NOT MATCHED BY TARGET THEN INSERT ");
+        sb.Append(" WHEN NOT MATCHED BY TARGET THEN INSERT ");
         if (context.Table.Columns.Count != 0)
         {
-            sb.Builder.Append('(');
-            sb.AppendColumns(context.Table.Columns);
-            sb.Builder.Append(") VALUES (");
-            sb.AppendColumns(context.Table.Columns, "S");
-            sb.Builder.Append(')');
+            sb.Append('(');
+            BuildHelper.AppendColumns(sb, context.Table.Columns);
+            sb.Append(") VALUES (");
+            BuildHelper.AppendColumns(sb, context.Table.Columns, "S");
+            sb.Append(')');
         }
         else
         {
-            sb.Builder.Append("DEFAULT VALUES");
+            sb.Append("DEFAULT VALUES");
         }
-
 
         return (sb.ToString(), parameters);
     }

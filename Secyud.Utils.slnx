@@ -4,9 +4,12 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/Secyud.Database.PostgreSql/Secyud.Database.PostgreSql.csproj" />
+    <Project Path="src/Secyud.Serilog.Sinks.Database/Secyud.Serilog.Sinks.Database.csproj" />
+    <Project Path="src/Secyud.Serilog.Sinks.PostgreSql/Secyud.Serilog.Sinks.PostgreSql.csproj" />
     <Project Path="src\Secyud.Database.SqlServer\Secyud.Database.SqlServer.csproj" />
     <Project Path="src\Secyud.Database\Secyud.Database.csproj" />
-    <Project Path="src\Secyud.DemoUtils\Secyud.DemoUtils.csproj" Type="Classic C#" />
+    <Project Path="src\Secyud.DemoUtils\Secyud.DemoUtils.csproj" Type="C#" />
     <Project Path="src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj" />
     <Project Path="src\Secyud.EntityFrameworkCore.Bulker\Secyud.EntityFrameworkCore.Bulker.csproj" />
   </Folder>

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="../../common.props"/>
+
+    <PropertyGroup>
+        <RootNamespace>Secyud.Serilog</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        
+        <ProjectReference Include="..\Secyud.Database.PostgreSql\Secyud.Database.PostgreSql.csproj" />
+        <ProjectReference Include="..\Secyud.Serilog.Sinks.Database\Secyud.Serilog.Sinks.Database.csproj" />
+    </ItemGroup>
+
+</Project>

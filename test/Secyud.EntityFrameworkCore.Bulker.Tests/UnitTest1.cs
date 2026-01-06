@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Components.Forms;
 using Secyud.EntityFrameworkCore.Bulker.Tests;
+using Xunit;
 
 namespace Secyud;
 
@@ -23,7 +24,7 @@ public class UnitTest1
         {
            var result = Validator.TryValidateObject(a, c, results, true);
         }
-        catch (ValidationException ve)
+        catch (ValidationException)
         {
         }
     }

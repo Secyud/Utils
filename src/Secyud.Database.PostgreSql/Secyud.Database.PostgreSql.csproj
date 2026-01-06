@@ -6,4 +6,8 @@
         <RootNamespace>Secyud.Database</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Secyud.Database\Secyud.Database.csproj" />
+    </ItemGroup>
+
 </Project>

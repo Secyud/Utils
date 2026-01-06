@@ -2,11 +2,10 @@
 
 namespace Secyud.Database;
 
-public abstract class SqlBuilderBase
+public abstract class SqlBuildHelperBase
 {
-    public StringBuilder Builder { get; } = new();
-
     public virtual void AppendColumns<TColumnInfo>(
+        StringBuilder sb,
         List<TColumnInfo> columns,
         string? prefixTable = null,
         string? equalsTable = null,
@@ -17,7 +16,7 @@ public abstract class SqlBuilderBase
         foreach (var column in columns)
         {
             if (appendComma)
-                Builder.Append(splitString);
+                sb.Append(splitString);
             else
                 appendComma = true;
 
@@ -25,47 +24,60 @@ public abstract class SqlBuilderBase
 
             if (prefixTable is not null)
             {
-                Builder.Append(prefixTable);
-                Builder.Append('.');
+                sb.Append(prefixTable);
+                sb.Append('.');
             }
 
-            Builder.Append(columnName);
+            sb.Append(columnName);
 
             if (equalsTable is not null)
             {
-                Builder.Append(" = ");
+                sb.Append(" = ");
                 if (equalsTable != "")
                 {
-                    Builder.Append(equalsTable);
-                    Builder.Append('.');
+                    sb.Append(equalsTable);
+                    sb.Append('.');
                 }
 
-                Builder.Append(columnName);
+                sb.Append(columnName);
             }
         }
     }
 
     public virtual void AppendColumnsSeparatedWithAnd<TColumnInfo>(
+        StringBuilder sb,
         List<TColumnInfo> columns,
         string? prefixTable = null,
         string? equalsTable = null)
         where TColumnInfo : IColumnInfo
     {
-        AppendColumns(columns, prefixTable, equalsTable, " AND ");
+        AppendColumns(sb, columns, prefixTable, equalsTable, " AND ");
+    }
+
+    public virtual string GetTableIdentifier(ITableInfo table)
+    {
+        return string.IsNullOrEmpty(table.Schema)
+            ? $"{GetTableSchema(table)}.{GetTableName(table)}"
+            : GetTableName(table);
+    }
+
+    public virtual string GetTableSchema(ITableInfo table)
+    {
+        return NormalizeIdentifier(table.Schema!);
     }
 
     public virtual string GetTableName(ITableInfo table)
     {
-        return $"{table.Schema}{(table.Schema is null ? "" : ".")}[{table.TableName}]";
+        return NormalizeIdentifier(table.TableName);
     }
 
     public virtual string GetColumnName(IColumnInfo column)
     {
-        return $"\"{column.ColumnName}\"";
+        return NormalizeIdentifier(column.ColumnName);
     }
 
-    public override string ToString()
+    protected virtual string NormalizeIdentifier(string identifier)
     {
-        return Builder.ToString();
+        return identifier;
     }
 }

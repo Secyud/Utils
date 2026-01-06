@@ -1,25 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <IsApp>true</IsApp>
+        <ProjectInfo>App</ProjectInfo>
     </PropertyGroup>
-    
+
     <Import Project="../../common.props"/>
+    <Import Project="../../../test.props"/>
 
     <ItemGroup>
-        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
-        <PackageReference Include="xunit" Version="2.9.2"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(DotnetVersion)"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj" />
+        <ProjectReference Include="..\..\src\Secyud.EntityFrameworkCore.Bulker.SqlServer\Secyud.EntityFrameworkCore.Bulker.SqlServer.csproj"/>
     </ItemGroup>
 
 </Project>
